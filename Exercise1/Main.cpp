@@ -4,26 +4,48 @@ using namespace std;
 #include "conio.h"
 #include "Calculator.h"
 
-double Calculator::add(double n1, double n2);
 
 int main()
 {
-	double fval;	//First Value
-	double sval;	//Second value
-	char op;		//Operator
+	double fval = 0;	//First Value
+	double sval;		//Second value
+	char op;			//Operator
 	double result;
-	cout << ">";
-	cin >> fval >> op >> sval;
-
-	if (op == '+') {
-		result = Calculator::add(fval, sval);
-	}
-	
-	else if (op == '-')
+	double mem_val;
+	while (true)
 	{
-		result = Calculator::subtract(fval, sval);
-	}
+		std::cout << ">";
+		cin >> fval >> op >> sval;
 
-	cout << result << endl;
-	_getch();
+
+		switch (op)
+		{
+		case'+':
+		{
+			result = Calculator::add(fval, sval);
+			break;
+		}
+		case'-':
+		{
+			result = Calculator::subtract(fval, sval);
+			break;
+		}
+		case'*':
+		{
+			result = Calculator::multiply(fval, sval);
+			break;
+		}
+		case'/':
+		{
+			result = Calculator::divide(fval, sval);
+			break;
+		}
+
+		}
+
+		std::cout << result << endl;
+		mem_val = result;			//Probably will remove later, just testing
+
+	}
+	return 0;
 }
