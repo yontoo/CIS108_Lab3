@@ -1,8 +1,7 @@
 namespace Calculator
 {
-	double current_val;
-	double mem_val;
 	double add(double, double);
+	double subtract(double, double);
+	double multiply(double, double);
+	double divide(double, double);
 }
-char op;
-double 
