@@ -23,6 +23,5 @@ int main()
 		Calculator::subtract(fval, sval);
 	}
 
-	cout << 
 
 }
