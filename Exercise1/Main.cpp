@@ -1,6 +1,7 @@
 using namespace std;
 
 #include <iostream>
+#include "conio.h"
 #include "Calculator.h"
 
 double Calculator::add(double n1, double n2);
@@ -15,13 +16,14 @@ int main()
 	cin >> fval >> op >> sval;
 
 	if (op == '+') {
-		Calculator::add(fval, sval);
+		result = Calculator::add(fval, sval);
 	}
 	
 	else if (op == '-')
 	{
-		Calculator::subtract(fval, sval);
+		result = Calculator::subtract(fval, sval);
 	}
 
-
+	cout << result << endl;
+	_getch();
 }
