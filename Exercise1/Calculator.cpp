@@ -33,13 +33,13 @@ double Calculator::power(double n1, double n2)
 	return pow(n1, n2);
 }
 
-//The way I inversed the sign of the result is by just subtracting 0 from it. 
+//The way I inversed the sign of the result is by just subtracting 0 from it. Could have just multiplied by -1, but I did this first.
 double Calculator::invert(double n1)
 {
 	return 0.0 - n1;
 }
 
-//This is probably the reason why I couldn't get the memory recall to work. Not entirely sure. 
+//Returns the memory to be called from the main file.
 double Calculator::call_mem()
 {
 	return current_mem;

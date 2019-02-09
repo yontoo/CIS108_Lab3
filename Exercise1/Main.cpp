@@ -1,7 +1,5 @@
-//This program is rough for me and I still have a lot to learn. For the most part, it hits most of the rules we were supposed to follow, with the exception of Memory Recall, Enter and "Any number" functions.
-//Which I have an slight idea of doing, but I think it would be almost completely different from how I'm doing it now. There are also a lot of things that break the program. At best you could call this "rough around the edges."
-//For example, starting the expression with something like " *3" completely breaks it, and seemingly causes the program to completely skip the op switch. It's probably the whitespace and my inabilty to tell the program how to deal with them.
-//I hate to leave it in such an unfinished state, but because of the lack of time and my poor time management this is all I can get out.
+//This program was rough for me and I still have a lot to learn. It was alse a good learning experience for me for problem solving my code.
+//Thanks to some helpful classmates like Sibani, Vasilije and Jeremy, as well as the snow day, I was able to finish this.
 
 using namespace std;
 
@@ -15,113 +13,174 @@ using namespace std;
 
 int main()
 {
-	double fval = 0;		//First Value
-	double sval = 0;		//Second value
+	double fval;				//First Value
+	double sval;				//Second value
+	string fval_str = "";
+	string sval_str = "";
 	char curr_key;
-	char op = ' ';			//Operator
+	char op = ' ';				//Operator
 	double result = 0.0;
-	double mem_val = 0.0;
+	int which_num = 1;			// Indicator for which number is being entered.
 	//This felt so jank while I was programming it, so I decided to give it a fitting name.
+
 	SetConsoleTitle("The MacGyvered Calculator");
-	while (true)
+
+
+	cout << ">";
+
+	do
 	{
-		cout << ">";
-		curr_key = _getch();		//This is used to tell the program which fork to go down, it creates an odd and jarring need to press a key before you can start an expression, but it gets the program functioning.
-		
-		
-		//This conditional has two paths, operators or letter functions, depending on what "curr_key" gets set to.
-		if (curr_key != 'X' && curr_key != 'x' && curr_key != 'C' && curr_key != 'c' && curr_key != 'S' && curr_key != 's' && curr_key != 'R' && curr_key != 'r' && curr_key != 'M' && curr_key != 'm' && curr_key != 'I' && curr_key != 'i')
+		//At the start of the loop, each character is read individually, which limits the kind of inputs that can be entered, unlike cin.
+		curr_key = char(_getch());
+
+		switch (curr_key)
 		{
-			cin >> fval >> op >> sval;
-			switch (op)
-			//Switch for the operators. If the op is read as + it adds, - is subtracts so on so forth. This was the easy part until I needed the program to be able to check if fval was a certain character. Which a double can't do.
+			//Saves current result when S is pressed.
+		case 's':
+		case 'S':
+		{
+			Calculator::save_mem(result);
+			cout << "Value saved!" << endl;
+			break;
+		}
+		//Clears saved memory value when M is pressed.
+		case 'M':
+		case 'm':
+		{
+			Calculator::clear_mem;
+			cout << "Memory cleared.";
+			break;
+		}
+		//Inverts the sign of the current result when I is pressed.
+		case 'I':
+		case 'i':
+		{
+			result = Calculator::invert(result);
+			fval_str = to_string(result);
+			cout << "Value inverted: " << result << endl;
+			break;
+		}
+		//Clears all values and resets the number indicator to 1 when C is pressed.
+		case 'C':
+		case 'c':
+		{
+			cout << "Value cleared." << endl;
+			fval = 0.0;
+			sval = 0.0;
+			fval_str = "";
+			sval_str = "";
+			which_num = 1;
+			result = 0.0;
+			break;
+		}
+		//Calls the value saved to memory when R is pressed.
+		case 'R':
+		case 'r':
+		{
+			result = Calculator::call_mem();
+			fval_str = to_string(result);
+			cout << "Stored value is " << result << "." << endl;
+			break;
+		}
+
+		case '1':
+		case '2':
+		case '3':
+		case '4':
+		case '5':
+		case '6':
+		case '7':
+		case '8':
+		case '9':
+		case '0':
+		case '.':
+		{
+			cout << curr_key;
+
+			if (which_num == 1)
 			{
-			
-			case'+':
-			{
-				result += Calculator::add(fval, sval);
-				cout << result << endl;
-				break;
+				fval_str += curr_key;		//Adds each digit to a string to create a number.
 			}
-			case'-':
+
+			else
 			{
-				result -= Calculator::subtract(fval, sval);
-				cout << result << endl;
-				break;
+				sval_str += curr_key;
 			}
-			case'*':
+			break;
+		}
+		case '+':
+		case '-':
+		case '/':
+		case '*':
+		case '^':
+		{
+			if (which_num == 1)
 			{
-					result = Calculator::multiply(fval, sval);
-					cout << result << endl;
+				fval = stod(fval_str);		//When an operator is pressed and the indicator is on the first number, then assign the double "fval" the converted string -> double "fval_str" and set the indicator the the second number. 
+				which_num = 2;				//Reset string values and set the op char to the key pressed.
+				fval_str = "";
+				sval_str = "";
+			}
+			op = curr_key;
+			cout << curr_key;
+			break;
+		}
+		case char(13) :
+		{
+			//Determine which funtion to call whenever enter is pressed and if there is something in the string "sval_str"
+			cout << endl;
+			if (sval_str != "")
+			{
+				sval = stod(sval_str);
+				switch (op)
+				{
+				case '+':
+				{
+					result = Calculator::add(fval, sval);
 					break;
-			}
-			case'/':
-			{
-				result = Calculator::divide(fval, sval);
-				cout << result << endl;
-				break;
-			}
-			case'^':
-			{
-				result = Calculator::power(fval, sval);
-				cout << result << endl;
-				break;
-			}
+				}
+				case'-':
+				{
+					result = Calculator::subtract(fval, sval);
+					break;
+				}
+				case '/':
+				{
+					result = Calculator::divide(fval, sval);
+					break;
+				}
+				case '*':
+				{
+					result = Calculator::multiply(fval, sval);
+					break;
+				}
+				case '^':
+				{
+					result = Calculator::power(fval, sval);
+					break;
+				}
+
+				}
 
 			}
+			cout << result << endl;
+			cout << ">";
+			fval_str = to_string(result);
+			sval_str = "";
+			which_num = 1;
+			break;
 		}
-		else
-		//The switch for the letter functions. Also calls functions from "Calculator.cpp." Mostly works.
-		{
-			switch (curr_key)
-			{
-			case 's': 
-			case 'S':
-			{
-				Calculator::save_mem(result);
-				cout << "Value saved!" << endl;
-				break;
-			}
-			case 'x':
-			case'X':
-			{
-				return 0;
-				break;
-			}
-			case 'M':
-			case 'm':
-			{
-				Calculator::clear_mem;
-				cout << "Memory cleared.";
-				break;
-			}
-			case 'I':
-			case 'i':
-			{
-				result = Calculator::invert(result);
-				cout << "Value inverted." << endl;
-				break;
-			}
-			case 'C':
-			case 'c':
-			{
-				cout << "Value cleared." << endl;
-				result = 0.0;
-				break;
-			}
 
-			//Couldn't figure this one out. It was supposed to set the double "mem_val" in this file to hold the funtion in Calculator.cpp's value, but I kept getting the error "a value of type 'double (*)()' cannot be assigned to an entity of type 'double.'"	
-			//For now I'm going to comment it out, and come back to it later once I've learned more.
-
-			//case 'R':
-			//case 'r':
-			//{
-				//mem_val = Calculator::call_mem;
-			//}
-			}
 
 		}
+
+
 	}
+	//Exit the main function when X is pressed.
+	while (curr_key != 'x' && curr_key != 'X');
+	return 0;
+}
+
 
 
 
